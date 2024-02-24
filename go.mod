@@ -1,4 +1,4 @@
-module jwtplugin
+module github.com/estev-work/jwtplugin
 
 go 1.22
 
