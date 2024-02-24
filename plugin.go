@@ -13,7 +13,6 @@ const (
 )
 
 type Plugin struct {
-	secret string
 	cfg    *Config
 	logger logger.Logger
 }
@@ -39,11 +38,11 @@ func (p *Plugin) Middleware(next http.Handler) http.Handler {
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 		_, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return []byte(p.secret), nil
+			return []byte(p.cfg.Secret), nil
 		})
 
 		if err != nil {
-			p.logger.NamedLogger("jwt_plugin").Error("invalid JWT token")
+			p.logger.NamedLogger("jwtplugin").Error("invalid JWT token")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
