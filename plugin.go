@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	PluginName string = "jwtplugin"
+	PluginName string = "jwt"
 )
 
 type Plugin struct {
@@ -47,6 +47,7 @@ func (s *Plugin) Init(cfg Configurer, log Logger) error {
 }
 
 func (s *Plugin) Middleware(next http.Handler) http.Handler {
+	s.logger.NamedLogger("jwt").Info("jwt middleware run")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if !strings.HasPrefix(authHeader, "Bearer ") {
@@ -58,9 +59,9 @@ func (s *Plugin) Middleware(next http.Handler) http.Handler {
 		_, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			return []byte(s.cfg.Secret), nil
 		})
-
+		s.logger.NamedLogger("jwt").Debug(tokenStr)
 		if err != nil {
-			s.logger.NamedLogger("jwtplugin").Error("invalid JWT token")
+			s.logger.NamedLogger("jwt").Error("invalid JWT token")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
