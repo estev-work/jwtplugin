@@ -29,7 +29,7 @@ type Logger interface {
 	NamedLogger(name string) *zap.Logger
 }
 
-func (s *Plugin) Init(cfg Configurer) error {
+func (s *Plugin) Init(cfg Configurer, log Logger) error {
 	const op = errors.Op("jwt_plugin_init")
 	if !cfg.Has(PluginName) {
 		return errors.E(op, errors.Disabled)
@@ -41,6 +41,7 @@ func (s *Plugin) Init(cfg Configurer) error {
 	}
 
 	s.cfg.InitDefaults()
+	s.logger = log
 	s.logger.NamedLogger("jwt_logger")
 	return nil
 }

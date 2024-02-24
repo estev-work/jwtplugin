@@ -6,7 +6,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/roadrunner-server/errors v1.4.0
 	github.com/roadrunner-server/logger/v4 v4.2.15
-	go.uber.org/zap v1.26.0
+	go.uber.org/zap v1.27.0
 )
 
 require (
